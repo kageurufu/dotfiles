@@ -1,5 +1,5 @@
 set nocompatible
-filetype off
+filetype on
 
 set rtp+=~/.vim/bundle/vundle
 
@@ -8,7 +8,6 @@ call vundle#rc()
 Bundle 'gmarik/vundle'
 
 Bundle 'Lokaltog/vim-easymotion'
-Bundle 'scrooloose/nerdtree'
 Bundle 'kien/ctrlp.vim'
 Bundle 'scrooloose/syntastic'
 Bundle 'Valloric/YouCompleteMe'
@@ -38,5 +37,6 @@ let g:Powerline_mode_cs="S·BLOCK"
 set noshowmode
 nnoremap ; :
 let mapleader= ","
-set t_Co=256
 colorscheme molokai
+let g:ctrlp_working_path_mode = 'ra'
+set backspace=2
