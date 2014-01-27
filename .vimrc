@@ -26,6 +26,11 @@ syntax on
 set encoding=utf-8
 set laststatus=2
 
+nnoremap ; :
+let mapleader= ","
+set backspace=2
+
+" Powerline configuration
 set rtp+=~/.vim/bundle/powerline/powerline/bindings/vim
 let g:Powerline_symbols = 'fancy'
 set t_Co=256
@@ -34,9 +39,10 @@ let g:Powerline_mode_V="V·LINE"
 let g:Powerline_mode_cv="V·BLOCK"
 let g:Powerline_mode_S="S·LINE"
 let g:Powerline_mode_cs="S·BLOCK"
-set noshowmode
-nnoremap ; :
-let mapleader= ","
 colorscheme molokai
+set noshowmode
+
+
+" Ctrlp configurations
 let g:ctrlp_working_path_mode = 'ra'
-set backspace=2
+let g:ctrlp_root_markers = ['.ctrlp', 'PKGBUILD', '.git/', '.bzr/']
