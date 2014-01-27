@@ -1,0 +1,5 @@
+[user]
+	email = franklyn@tackitt.net
+	name = Frank Tackitt
+[core]
+	excludesfile = .gitignore_global
