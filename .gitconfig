@@ -3,3 +3,5 @@
 	name = Frank Tackitt
 [core]
 	excludesfile = .gitignore_global
+[push]
+	default = simple
