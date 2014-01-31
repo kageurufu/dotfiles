@@ -14,6 +14,7 @@ Bundle 'Valloric/YouCompleteMe'
 Bundle 'Lokaltog/powerline'
 Bundle 'nathanaelkane/vim-indent-guides'
 Bundle 'flazz/vim-colorschemes'
+Bundle 'mattn/emmet-vim'
 
 filetype plugin indent on
 
