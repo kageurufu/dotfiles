@@ -44,19 +44,11 @@ fi
 
 # Virtualenv support
 
-#function virtual_env_prompt () {
-#    REPLY=${VIRTUAL_ENV+(${VIRTUAL_ENV:t}) }
-#}
-#grml_theme_add_token  virtual-env -f virtual_env_prompt '%F{magenta}' '%f'
-#zstyle ':prompt:grml:left:setup' items rc virtual-env change-root user at host path vcs percent
-
-## ZLE tweaks ##
-
-## use the vi navigation keys (hjkl) besides cursor keys in menu completion
-#bindkey -M menuselect 'h' vi-backward-char        # left
-#bindkey -M menuselect 'k' vi-up-line-or-history   # up
-#bindkey -M menuselect 'l' vi-forward-char         # right
-#bindkey -M menuselect 'j' vi-down-line-or-history # bottom
+function virtual_env_prompt () {
+    REPLY=${VIRTUAL_ENV+(${VIRTUAL_ENV:t}) }
+}
+grml_theme_add_token  virtual-env -f virtual_env_prompt '%F{magenta}' '%f'
+zstyle ':prompt:grml:left:setup' items rc virtual-env change-root user at host path vcs percent
 
 ## set command prediction from history, see 'man 1 zshcontrib'
 #is4 && zrcautoload predict-on && \
@@ -347,7 +339,7 @@ check_virtualenv() {
         fi
     fi
 }
-venv_cd () {
+cd () {
     builtin cd "$@" && check_virtualenv
 }
 # Call check_virtualenv in case opening directly into a directory (e.g
@@ -381,3 +373,24 @@ aurg() {
   tar -xvf ${filename}
   rm ${filename}
 }
+
+
+alias fuck='sudo `fc -n -l -1`'
+alias zshrc='vim ~/.zshrc && . ~/.zshrc'
+alias syua='yaourt -Syua'
+alias syuan='yaourt -Syua --noconfirm'
+alias ys='yaourt -S'
+alias ysn='yaourt -S --noconfirm'
+alias svc='sudo systemctl'
+alias tp='trash-put'
+alias tl='trash-list'
+alias rm='trash-put'
+sudo-accept-line(){
+  if [ -n "${BUFFER## *}" ]; then
+    BUFFER="sudo ${BUFFER## *sudo }"
+    zle end-of-line        
+    zle accept-line
+  fi
+}
+zle -N sudo-accept-line
+bindkey "^O" sudo-accept-line
