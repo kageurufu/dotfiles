@@ -325,8 +325,9 @@ zstyle ':prompt:grml:left:setup' items rc virtual-env change-root user at host p
 
 ## END OF FILE #################################################################
 
+export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python2
 export WORKON_HOME=$HOME/.venvs
-export PROJECT_HOME=$HOME/Source
+export PROJECT_HOME=$HOME/src
 	
 source /usr/bin/virtualenvwrapper.sh
 
@@ -346,8 +347,8 @@ cd () {
 # when opening a new tab in Terminal.app).
 check_virtualenv
 
-export PATH=$HOME/bin:$PATH:$HOME/.gem/ruby/2.0.0/bin:$HOME/Source/Go/bin
-export GOPATH=$HOME/Source/Go
+export PATH=$HOME/bin:$PATH:$HOME/.gem/ruby/2.0.0/bin:$HOME/go/bin
+export GOPATH=$HOME/go
 
 aurg() {
   package_name=$1
@@ -384,7 +385,7 @@ alias ysn='yaourt -S --noconfirm'
 alias svc='sudo systemctl'
 alias tp='trash-put'
 alias tl='trash-list'
-alias rm='trash-put'
+
 sudo-accept-line(){
   if [ -n "${BUFFER## *}" ]; then
     BUFFER="sudo ${BUFFER## *sudo }"
