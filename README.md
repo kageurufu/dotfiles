@@ -8,7 +8,7 @@ pacman -S stow || apt install stow
 
 git clone https://github.com/kageurufu/dotfiles.git ~/.dotfiles
 cd ~/.dotfiles
-stow *
+stow tmux zsh ...
 ```
 
 * Spacemacs for Emacs
