@@ -1,0 +1,12 @@
+#!/bin/sh
+
+SERVERS=$(grep production-comanage- $HOME/.ssh/config | awk '{ print $2 }')
+TEMP=$(mktemp -d)
+
+for server in ${SERVERS}; do
+  scp -C $server:/var/log/httpd/error_log $TEMP/$server
+done
+
+less $TEMP/*
+rm -r $TEMP
+exit 0

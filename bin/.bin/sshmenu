@@ -1,0 +1,4 @@
+#!/bin/bash
+HOSTS=$(grep -e "^Host" ~/.ssh/config | cut -d " " -f 2)
+HOST=$(printf '%s\n' "$HOSTS" | dmenu "$@")
+i3-sensible-terminal -e ssh $HOST

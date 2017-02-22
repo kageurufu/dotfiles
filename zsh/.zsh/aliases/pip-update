@@ -1,0 +1,8 @@
+#!/bin/zsh
+pip-update() {
+  cd ~/Source/comanage
+  pip-compile -r requirements.in
+  pip-compile -r dev-requirements.in
+  pip-sync dev-requirements.txt
+  sed -i "s/current_requirements_hash = .*/current_requirements_hash = \"$(md5sum requirements.txt | cut -f 1 -d ' ')\"/" tests/abstract/test_license.py
+}

@@ -1,0 +1,2 @@
+#!/bin/bash
+find ~/Pictures/Wallpapers -type f -exec file {} \; | grep 1920x1080 | cut -d : -f 1 | tee lockscreens

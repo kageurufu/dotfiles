@@ -1,0 +1,5 @@
+#compdef restore
+
+_arguments \
+    '(-d --database)'{-d,--database}'=[Postgres database (will be reset)]:sql_database' \
+    '(-s --snapshot-dir)'{-s,--snapshot-dir}'=[Directory to load snapshots from]:_path' 

@@ -1,0 +1,39 @@
+#!/usr/bin/env python3
+from __future__ import print_function, unicode_literals
+import os
+import gnupg
+
+blank_config = """[DEFAULT]
+gpg-id = 
+
+# List your accounts like this, the section is the label that will be used in the block
+# [Your Email]
+# username = your.email@gmail.com
+# password = your_password"""
+
+try:
+    from configparser import ConfigParser
+except ImportError:
+    from ConfigParser import ConfigParser
+
+config = ConfigParser()
+config.readfp(open(os.path.expanduser("~/.config/gmail.cfg")))
+
+def get_password_factory(gpg_id=None):
+    def get_password(password):
+        return password
+    if gpg_id:
+        return decrypt_password
+    else:
+        return lambda s: s
+
+get_password = get_password_factory(config.get("DEFAULT", "gpg-id", raw=True))
+
+accounts = {
+    label: dict(
+        username=config.get(label, "username"),
+        password=get_password(config.get(label, "password"))
+    ) for label in config.sections()
+}
+
+print(accounts)

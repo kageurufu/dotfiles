@@ -1,0 +1,12 @@
+#!/bin/bash
+
+HOSTNAME=$1
+CURRENT="$(dig +short $HOSTNAME @8.8.8.8)"
+echo "$HOSTNAME - ${CURRENT}"
+echo "$HOSTNAME"
+
+if [[ "${CURRENT}" == "98.172.84.183" ]]; then
+  exit 0
+else 
+  exit 33
+fi

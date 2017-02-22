@@ -1,0 +1,7 @@
+#!/bin/bash
+
+
+for db in $(psql -tqc "SELECT datname FROM pg_database WHERE datname ~* '[a-f0-9]{32}';"); do
+  psql -c "DROP DATABASE \"$db\";"
+done
+

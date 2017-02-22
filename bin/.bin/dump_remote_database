@@ -1,0 +1,28 @@
+#!/bin/bash
+
+REMOTE_SERVER=$1
+cat <<'EOF' | ssh ${REMOTE_SERVER} "cat > ~/dump_database.sh"
+if [[ $(id -u) -ne 0 ]]; then
+  echo "You must run this as root, on the ec2 instance, attempting sudo"
+  if ! sudo $0 $*; then
+    echo "sudo \"$0 $*\" failed, cannot sudo"
+    exit 2
+  fi
+  exit 0
+else 
+  echo "Running as root, continuing"
+fi
+
+INSTANCE=$(docker ps -q)
+
+echo "Dumping database from $INSTANCE"
+docker exec -t -i $(docker ps -q) /bin/bash -c 'PGPASSWORD=$RDS_PASSWORD pg_dump --dbname=$RDS_DB_NAME --host=$RDS_HOSTNAME --port=$RDS_PORT --username=$RDS_USERNAME --clean' > dump.sql
+EOF
+
+OUTPUT_FILE="${HOME}/.dbsnaps/dump-$(date '+%Y-%m-%d').sql"
+
+ssh -t ${REMOTE_SERVER} "bash -c 'chmod +x ~/dump_database.sh; ~/dump_database.sh'"
+scp -C ${REMOTE_SERVER}:dump.sql ${OUTPUT_FILE}
+gzip "${OUTPUT_FILE}"
+
+echo "Database saved as ${OUTPUT_FILE}.gz"

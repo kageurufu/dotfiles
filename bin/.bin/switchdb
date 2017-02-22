@@ -1,0 +1,4 @@
+#!/bin/bash
+
+export DATABASE_URL=postgresql+psycopg2://comanage@localhost/$1
+export SQLALCHEMY_DATABASE_URI=postgresql+psycopg2://comanage@localhost/$1

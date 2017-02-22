@@ -1,0 +1,3 @@
+#!/bin/bash
+
+primusrun setarch i386 -3 -L -B -R /usr/bin/wine ".wine/drive_c/Program Files (x86)/Battle.net/Battle.net Launcher.exe"

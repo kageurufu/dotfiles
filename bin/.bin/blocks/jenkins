@@ -1,0 +1,28 @@
+#!/usr/bin/python2
+import os
+import requests
+import json
+
+filename, _ = os.path.splitext(__file__)
+job = os.path.basename(filename)
+
+BASE_URL = 'http://ci.comanagelabs.com/job/{JOB}/lastBuild/api/json'
+url = BASE_URL.format(JOB=job)
+
+cookies = dict(map(lambda s: s.split('='), """JSESSIONID.089f4a47=117yg4h5ftu13oqn7z0t57xhg
+JSESSIONID.ed03b993=142jblzmdfeaq17h82x25zc6it
+JSESSIONID.e0d24da5=mkijqz7r7vut9cn14p8sn1i1
+JSESSIONID.30a79309=8xmvp0nv8fvi4vz1e1crrwa
+JSESSIONID.244eccca=1r11tr8w1yo9eizj603dxwmg9
+JSESSIONID.0b1cf81c=bqie497yd0iyodfota9kxwcj
+JSESSIONID.56228e1d=xroowvp2ycl7sgouup29sd6p
+JSESSIONID.07cf61a0=1ni5moe7v90xavwncymnljzik
+JSESSIONID.e94a76a4=16jacyld7nujp5m74nxvhbmce
+JSESSIONID.9d57324c=dc5k9v99s82xflaobm5f6yi1
+JSESSIONID.b8dacc8d=1vsacnse40vk41coqpw3nz4c7g
+JSESSIONID.2ec32fc5=1q6yf1qnjkn6t1n3q2y90n34wb""".split()))
+
+resp = requests.get(url, cookies=cookies)
+data = json.loads(resp.text)
+
+print(data['result'])

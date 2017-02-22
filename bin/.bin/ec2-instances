@@ -1,0 +1,76 @@
+#!/usr/bin/env python2
+
+import boto
+from collections import defaultdict
+from pprint import pprint
+import os, sys
+
+DIVIDER = """
+###########################################
+########       ec2-instances       ########
+######## DO NOT DELETE THIS MARKER ########
+###########################################
+"""
+
+TMPL = """
+Host {name}
+  HostName {ip}
+  User {user}
+  IdentityFile ~/.ssh/{id}
+"""
+
+def get_instances():
+    ec2 = boto.connect_ec2()
+    reservations = ec2.get_all_instances()
+    instances = [i for r in reservations for i in r.instances]
+    col = defaultdict(list)
+    for i in instances:
+        try:
+            if i.ip_address:
+                col[i.tags['Name']].append(i)
+        except:
+            pass
+    return col
+
+def read_old_config():
+    with open(os.path.expanduser("~/.ssh/config"), "r") as fin:
+        config = fin.read()
+        try:
+            config, old = config.split(DIVIDER)
+            print("Removing old instances")
+        except Exception:
+            print("Initializing config")
+            old = None
+            pass
+    return config, old
+
+def write_new_config(config, collected_instances, user='ec2-user', id_file='id_aws'):
+    with open(os.path.expanduser("~/.ssh/config"), "w") as fout:
+        fout.write(config)
+        fout.write(DIVIDER)
+    
+        for name, instances in collected_instances.items():
+            for index, instance in enumerate(instances):
+                fout.write(TMPL.format(
+                        name=name + ("-%d" % (index + 1)),
+                        id=id_file,
+                        ip=instance.ip_address,
+                        user=user
+                    ))
+                print("Instance %s-%d (%s)" % (name, index + 1, instance.ip_address))
+
+
+if __name__ == '__main__':
+    import argparse
+
+    parser = argparse.ArgumentParser(description="Generate an SSH config for ec2 instance")
+    parser.add_argument("--user", "-u", default="ec2-user", help="Username for ec2 instances")
+    parser.add_argument("--id_file", "-i", default="id_aws", help="ID file name (id_aws)")
+
+    args = parser.parse_args()
+    
+    instances = get_instances()
+    config, old = read_old_config()
+
+    write_new_config(config, instances, **args.__dict__)
+

@@ -1,0 +1,11 @@
+#!/bin/bash
+
+INSTANCES=$(docker ps -q | wc -l)
+
+if [[ -z ${INSTANCES} ]]; then
+  echo ${INSTANCES} docker instances
+  echo ""
+else
+  echo ${INSTANCES} docker instances
+  echo Docker ${INSTANCES}
+fi

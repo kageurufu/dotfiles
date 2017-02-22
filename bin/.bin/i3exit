@@ -1,0 +1,77 @@
+#!/bin/sh
+BACKGROUND_COLOR=000000
+INSIDE_COLOR=#B6B6B644
+INSIDE_VER_COLOR=#B6D5B644
+INSIDE_WRONG_COLOR=#FFB6B644
+RING_COLOR=#929292BB
+RING_VER_COLOR=#91DD91BB
+RING_WRONG_COLOR=#DE9191BB
+LINE_COLOR=#494949FF
+TEXT_COLOR=#242424FF
+TEXT_ATTEMPTS_COLOR=#494949FF
+KEY_HIGHLIGHT_COLOR=#DBDBDBFF
+BACKSPACE_HIGHLIGHT_COLOR=#FFDBDBFF
+
+LOCK_COLORSCHEME="--color $BACKGROUND_COLOR --insidecolor $INSIDE_COLOR --insidevercolor $INSIDE_VER_COLOR --insidewrongcolor $INSIDE_WRONG_COLOR --ringcolor $RING_COLOR --ringvercolor $RING_VER_COLOR --ringwrongcolor $RING_WRONG_COLOR --linecolor $LINE_COLOR --textcolor $TEXT_COLOR --textattemptscolor $TEXT_ATTEMPTS_COLOR --keyhlcolor $KEY_HIGHLIGHT_COLOR --bshlcolor $BACKSPACE_HIGHLIGHT_COLOR"
+lock() {
+  convert "$(cat ~/.i3/lockscreens | sort -R | head -n 1)" -colorspace gray  ~/.i3/lock.png
+  /usr/bin/i3lock --ignore-empty-password --show-failed-attempts --image ~/.i3/lock.png $LOCK_COLORSCHEME && sleep 1
+  # For i3lock-blur
+  # /usr/bin/i3lock -fel && sleep 1
+}
+
+set_windows_next_boot() {
+  local ENTRY=$(sudo efibootmgr | grep Windows\ Boot\ Manager | cut -c5-8)
+  sudo efibootmgr -n ${ENTRY} >/dev/null || i3-nagbar -t error -m 'Failed to set windows for next boot!'
+}
+
+case "$(basename $0)" in
+  i3lock)
+    CMND="lock"
+    ;;
+  i3logout)
+    CMND="logout"
+    ;;
+  i3suspend)
+    CMND="suspend"
+    ;;
+  i3reboot)
+    CMND="reboot"
+    ;;
+  i3shutdown)
+    CMND="shutdown"
+    ;;
+  *)
+    CMND="$1"
+esac
+
+case "$CMND" in
+  lock)
+    lock
+    ;;
+  logout)
+    i3-msg exit
+    ;;
+  suspend)
+    lock && systemctl suspend
+    ;;
+  reboot)
+    systemctl reboot
+    ;;
+  shutdown)
+    systemctl poweroff
+    ;;
+  reboot-windows)
+    set_windows_next_boot
+    systemctl reboot
+    ;;
+  shutdown-windows)
+    set_windows_next_boot
+    systemctl poweroff
+    ;;
+  *)
+    echo "Usage: $0 {lock|logout|suspend|reboot|shutdown|reboot-windows|shutdown-windows}"
+    exit 2
+esac
+
+exit 0

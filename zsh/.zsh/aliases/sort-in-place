@@ -1,0 +1,22 @@
+sort-in-place () {
+	if [[ ! -f "$1" ]]
+	then
+		echo "Usage: $0 file"
+		exit 2
+	fi
+	TEMPFILE=$(mktemp) 
+	sort -h "$1" > "$TEMPFILE"
+	cat "$TEMPFILE" > "$1"
+	rm "$TEMPFILE"
+}
+uniq-in-place () {
+	if [[ ! -f "$1" ]]
+	then
+		echo "Usage: $0 file"
+		exit 2
+	fi
+	TEMPFILE=$(mktemp) 
+	uniq "$1" > "$TEMPFILE"
+	cat "$TEMPFILE" > "$1"
+	rm "$TEMPFILE"
+}

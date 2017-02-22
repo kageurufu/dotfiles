@@ -1,0 +1,88 @@
+#!/bin/bash
+#CONFIGURABLE OPTIONS
+PREFIX=comanage
+TEST_BASE_DIR="/tmp/tests"
+SOURCE_DIR="$HOME/Source/comanage"
+NUM_CORES_TO_RUN_ON=5
+
+#DONT CHANGE THESE
+TEST_ID="${PREFIX}-${RANDOM}"
+TEST_DIR="${TEST_BASE_DIR}/${TEST_ID}"
+VENV=comanage
+
+if [[ -t 1 && $(tput colors) -ge 8 ]]; then
+  Green='\e[0;32m'        # Green
+  White='\e[0;37m'        # White
+  On_Black='\e[40m'       # Black
+  Color_Off='\e[0m'       # Text Reset
+fi
+set -e
+
+function make_test_dir {
+  log "Creating test directory"
+  mkdir -p "${TEST_DIR}"
+  mkdir "${TEST_DIR}/mail"
+  mkdir "${TEST_DIR}/sms"
+  mkdir "${TEST_DIR}/venv"
+  mkdir "${TEST_DIR}/source"
+}
+
+function make_virtualenv {
+  log "Creating virtualenv"
+  virtualenv -p `which python2` "${TEST_DIR}/venv" >/dev/null
+}
+
+function copy_source {
+  log "Copying source to test directory"
+  cp -R ${SOURCE_DIR}/* "${TEST_DIR}"
+}
+
+function setup_venv {
+  cd "${TEST_DIR}"
+  source "${TEST_DIR}/venv/bin/activate"
+  log "Installing packages using pip"
+  pip install -q -r dev-requirements.txt
+}
+
+function handle_venv {
+  if [[ ! -z ${VENV} ]]; then
+    log "Using virtualenv '${VENV}'"
+  else
+    log "Creating new virtualenv"
+    make_virtualenv
+    setup_venv
+  fi
+}
+
+function run_tests {
+  if [[ ! -z "${VENV}" ]]; then
+    source /home/frank/.virtualenvs/${VENV}/bin/activate
+  else
+    source "${TEST_DIR}/venv/bin/activate"
+  fi
+
+  cd "${TEST_DIR}"
+  log "Starting test runner"
+  python run_tests_parallel.py -c ${NUM_CORES_TO_RUN_ON} -w "${TEST_ID}" -o "${SOURCE_DIR}/test-$(date '+%Y-%m-%d-%H-%M-%S'
+  ).log" $*
+}
+
+function cleanup {
+  log "Cleaning up test folder"
+  rm -rf "${TEST_DIR}"
+}
+
+function log {
+  echo -e "${On_Black}${Green}--> ${On_Black}${White}${*}${Color_Off}"
+}
+
+trap "cleanup" EXIT
+
+make_test_dir
+copy_source
+handle_venv
+
+run_tests $*
+
+notify-send -a run_all_tests -u critical "All tests complete" "All tests have completed"
+cleanup

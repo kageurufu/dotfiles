@@ -1,0 +1,3 @@
+set-cache-size() { sudo mount -o remount,size=$1 /home/frank/.cache }
+increase-cache() { set-cache-size 9G }
+decrease-cache() { set-cache-size 600M }

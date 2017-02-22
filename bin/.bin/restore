@@ -1,0 +1,76 @@
+#!/bin/bash
+
+DATABASE=comanage_new
+SNAPSHOT=
+SNAPSHOT_DIR=${HOME}/.dbsnaps/
+INTO_DOCKER=0
+PSQL_COMMAND=psql
+
+usage() {
+  echo "  Usage: $0 [options] <snapshot_name>"
+  echo "    -d, --database"
+  echo "        Database to restore to. Defaults to '${DATABASE}'"
+  echo "    -s, --snapshot-dir"
+  echo "        Directory to load snapshots from. Defaults to '${SNAPSHOT_DIR}'"
+  echo "    -c, --docker-container"
+  echo "        Restore database into docker container"
+  echo "    snapshot_name (required)"
+  echo "        Name of a snapshot. Must exist as \$name.sql.gz in the snapshot directory"
+  exit 2
+}
+
+while [[ $# -gt 0 ]]; do
+  case $1 in
+    -d|--database)
+      DATABASE=$(echo "${2}")
+      shift
+      ;;
+    -p|--snapshot-dir)
+      SNAPSHOT_DIR=$(echo "${2}")
+      shift
+      ;;
+    -c|--docker-container)
+      PSQL_COMMAND='docker-compose -f development.yml run comanage bash -c '\''PGPASSWORD=comanage psql --host $DB_PORT_5432_TCP_ADDR --port $DB_PORT_5432_TCP_PORT --user comanage -n'\'''
+      DATABASE=comanage
+      ;;
+    -h|--help)
+      usage
+      ;;
+    *)
+      SNAPSHOT=$(echo "${1}")
+      ;;
+  esac
+  shift
+done
+
+if [[ ! "${SNAPSHOT}" || -z "${SNAPSHOT}" ]]; then
+  usage
+fi
+
+if [[ ! -e "${SNAPSHOT_DIR}${SNAPSHOT}.sql.gz" ]]; then
+  echo "Snapshot '${SNAPSHOT}' not found"
+  exit 1
+fi
+
+write_sql() {
+  PASSWORD='$2a$04$WTO2nr3cfYOk0wqShu5/M.qo/C42Mphg9rv9ZhCwGaLuHkXXXeGZ6'
+
+  echo "SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname = '$1';"
+  echo "DROP DATABASE \"$1\";"
+  echo "CREATE DATABASE \"$1\" WITH OWNER comanage;"
+  echo "\connect $1"
+  echo "CREATE EXTENSION \"uuid-ossp\";"
+  echo "CREATE EXTENSION \"ltree\";"
+  echo "CREATE EXTENSION \"plv8\";"
+  echo "CREATE EXTENSION \"pg_trgm\";"
+  
+  # Dump the snapshot
+  pv -p -w 80 "${SNAPSHOT_DIR}/${SNAPSHOT}.sql.gz" | zcat
+  
+  # Reset the passwords
+  echo "UPDATE \"user\" SET password = '${PASSWORD}', totp_enabled = FALSE, totp_key = '';"
+}
+
+echo "Restoring from '${SNAPSHOT}'"
+write_sql $DATABASE | $PSQL_COMMAND 2>&1 >/dev/null;
+exit 0
