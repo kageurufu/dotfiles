@@ -12,5 +12,6 @@ export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python
 export VIRTUALENVWRAPPER_VIRTUALENV=/usr/bin/virtualenv
 export VIRTUALENVWRAPPER_VIRTUALENV_ARGS='--no-site-packages'
 
-eval "$(pyenv init -)"
-source /usr/bin/virtualenvwrapper.sh
+[ -x "$(command -v pyenv)" ] && eval "$(pyenv init -)"
+[ -e "/usr/bin/virtualenvwrapper.sh" ] && source /usr/bin/virtualenvwrapper.sh
+[ -e "/usr/share/virtualenvwrapper/virtualenvwrapper.sh" ] && source /usr/share/virtualenvwrapper/virtualenvwrapper.sh
