@@ -40,12 +40,10 @@ if ! zgen saved; then
   zgen oh-my-zsh plugins/pep8
   zgen oh-my-zsh plugins/node
   zgen oh-my-zsh plugins/postgres
+  zgen oh-my-zsh plugins/pyenv
   zgen oh-my-zsh plugins/virtualenv
   zgen oh-my-zsh plugins/virtualenvwrapper
   zgen oh-my-zsh themes/agnoster
 
   zgen save
 fi
-
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -f /home/frank/.travis/travis.sh ] && source /home/frank/.travis/travis.sh

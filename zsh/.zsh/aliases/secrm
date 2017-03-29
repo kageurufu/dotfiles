@@ -1,0 +1,1 @@
+alias secrm='shred -n 10 -u -v'
