@@ -16,7 +16,7 @@ fi
 INSTANCE=$(docker ps -q)
 
 echo "Running psql on $INSTANCE"
-docker exec -t -i $(docker ps -q) /bin/bash -c 'PGPASSWORD=$RDS_PASSWORD psql --dbname=$RDS_DB_NAME --host=$RDS_HOSTNAME --port=$RDS_PORT --username=$RDS_USERNAME'
+docker exec -t -i $(docker ps -q) /bin/sh -c 'apk add --update --no-cache postgresql-client; PGPASSWORD=$RDS_PASSWORD psql --dbname=$RDS_DB_NAME --host=$RDS_HOSTNAME --port=$RDS_PORT --username=$RDS_USERNAME'
 EOF
 
 OUTPUT_FILE="dump-$(date '+%Y-%m-%d').sql"

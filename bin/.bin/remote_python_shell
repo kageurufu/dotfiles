@@ -12,7 +12,7 @@ fi
 
 INSTANCE=$(docker ps -q)
 
-docker exec -t -i $(docker ps -q) /bin/bash -c 'pip install ipython; python manage shell'
+docker exec -t -i $(docker ps -q) /bin/sh -c 'pip install ipython; python manage shell'
 EOF
 
 ssh -t ${REMOTE_SERVER} "bash -c 'chmod +x ~/shell.sh; ~/shell.sh'"

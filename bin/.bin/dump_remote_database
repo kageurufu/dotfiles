@@ -16,12 +16,12 @@ fi
 INSTANCE=$(docker ps -q)
 
 echo "Dumping database from $INSTANCE"
-docker exec -t -i $(docker ps -q) /bin/bash -c 'PGPASSWORD=$RDS_PASSWORD pg_dump --dbname=$RDS_DB_NAME --host=$RDS_HOSTNAME --port=$RDS_PORT --username=$RDS_USERNAME --clean' > dump.sql
+docker exec -t -i $(docker ps -q) /bin/sh -c 'apk add --update --no-cache postgresql >/dev/null; PGPASSWORD=$RDS_PASSWORD pg_dump --dbname=$RDS_DB_NAME --host=$RDS_HOSTNAME --port=$RDS_PORT --username=$RDS_USERNAME --clean' > dump.sql
 EOF
 
 OUTPUT_FILE="${HOME}/.dbsnaps/dump-$(date '+%Y-%m-%d').sql"
 
-ssh -t ${REMOTE_SERVER} "bash -c 'chmod +x ~/dump_database.sh; ~/dump_database.sh'"
+ssh -t ${REMOTE_SERVER} "sh -c 'chmod +x ~/dump_database.sh; ~/dump_database.sh'"
 scp -C ${REMOTE_SERVER}:dump.sql ${OUTPUT_FILE}
 gzip "${OUTPUT_FILE}"
 
