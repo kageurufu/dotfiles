@@ -3,7 +3,7 @@
 	name = Franklyn Tackitt
 	signingkey = franklyn@tackitt.net
 [core]
-	autocrlf = input
+#	autocrlf = input
 	excludesfile = /home/frank/.gitignore_global
 	attributesfile = .gitattributes_global
 [push]
