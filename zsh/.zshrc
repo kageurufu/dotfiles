@@ -47,3 +47,7 @@ if ! zgen saved; then
 
   zgen save
 fi
+
+if [ -n "$VIRTUAL_ENV" ]; then
+  . "$VIRTUAL_ENV/bin/activate"
+fi

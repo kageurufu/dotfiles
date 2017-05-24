@@ -4,9 +4,13 @@ export PYENV_ROOT="$HOME/.pyenv"
 export NVM_DIR="$HOME/.nvm"
 
 export PATH=$HOME/.bin:$PATH
-export PATH="${ANDROID_HOME}/tools:${ANDROID_HOME}/platform-tools:${PATH}"
+export PATH="${ANDROID_HOME}/tools:${ANDROID_HOME}/tools/bin:${ANDROID_HOME}/platform-tools:${PATH}"
 export PATH="$PYENV_ROOT/bin:$PATH"
 export PATH=$HOME/.gem/ruby/2.4.0/bin:$PATH
+
+# ESP32 Dev Stuff
+export PATH=$PATH:$HOME/.esp/xtensa-esp32-elf/bin
+export IDF_PATH=~/.esp/pycom-esp-idf
 
 export WORKON_HOME=$HOME/.virtualenvs
 export PROJECT_HOME=$HOME/Source
