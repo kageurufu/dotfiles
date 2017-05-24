@@ -28,6 +28,7 @@ Plug 'PotatoesMaster/i3-vim-syntax'
 Plug 'kchmck/vim-coffee-script'
 Plug 'tikhomirov/vim-glsl'
 Plug 'wlangstroth/vim-racket'
+Plug 'dart-lang/dart-vim-plugin'
 
 " Colorschemes
 Plug 'flazz/vim-colorschemes'
