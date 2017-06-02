@@ -1,4 +1,8 @@
-export ANDROID_HOME="${HOME}/Android/Sdk"
+if [[ -e "${HOME}/Library/Android/sdk" ]]; then
+  export ANDROID_HOME="${HOME}/Library/Android/sdk"
+else
+  export ANDROID_HOME="${HOME}/Android/Sdk"
+fi
 export GOPATH="$HOME/Source/go"
 export PYENV_ROOT="$HOME/.pyenv"
 export NVM_DIR="$HOME/.nvm"
