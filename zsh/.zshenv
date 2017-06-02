@@ -22,4 +22,5 @@ export VIRTUALENVWRAPPER_VIRTUALENV_ARGS='--no-site-packages'
 [ -e "/usr/bin/virtualenvwrapper.sh" ] && source /usr/bin/virtualenvwrapper.sh
 [ -e "/usr/share/virtualenvwrapper/virtualenvwrapper.sh" ] && source /usr/share/virtualenvwrapper/virtualenvwrapper.sh
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "/usr/local/opt/nvm/nvm.sh" ] && \. "/usr/local/opt/nvm/nvm.sh"
 [ -f /home/frank/.travis/travis.sh ] && source /home/frank/.travis/travis.sh
