@@ -7,7 +7,9 @@ call plug#begin('~/.vim/plugged')
 Plug 'Shougo/unite.vim'
 Plug 'Shougo/vimproc.vim', {'do': 'make'}
 
-Plug 'Valloric/YouCompleteMe', {'do': './install.py --all'}
+if v:version > 730
+  Plug 'Valloric/YouCompleteMe', {'do': './install.py --all'}
+endif
 
 Plug 'tpope/vim-fugitive'
 Plug 'Lokaltog/vim-easymotion'
