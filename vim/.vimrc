@@ -6,6 +6,7 @@ call plug#begin('~/.vim/plugged')
 
 Plug 'Shougo/unite.vim'
 Plug 'Shougo/vimproc.vim', {'do': 'make'}
+Plug 'ctrlpvim/ctrlp.vim'
 
 if v:version > 730
   Plug 'Valloric/YouCompleteMe', {'do': './install.py --all'}
@@ -31,6 +32,7 @@ Plug 'kchmck/vim-coffee-script'
 Plug 'tikhomirov/vim-glsl'
 Plug 'wlangstroth/vim-racket'
 Plug 'dart-lang/dart-vim-plugin'
+Plug 'manicmaniac/coconut.vim'
 
 " Colorschemes
 Plug 'flazz/vim-colorschemes'
