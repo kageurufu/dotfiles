@@ -4,13 +4,13 @@ endif
 
 call plug#begin('~/.vim/plugged')
 
-Plug 'Shougo/unite.vim'
-Plug 'Shougo/vimproc.vim', {'do': 'make'}
-Plug 'ctrlpvim/ctrlp.vim'
+" Plug 'Shougo/unite.vim'
+" Plug 'Shougo/vimproc.vim', {'do': 'make'}
+" Plug 'ctrlpvim/ctrlp.vim'
 
-if v:version > 730
-  Plug 'Valloric/YouCompleteMe', {'do': './install.py --all'}
-endif
+" if v:version > 730
+"   Plug 'Valloric/YouCompleteMe', {'do': './install.py --all'}
+" endif
 
 Plug 'tpope/vim-fugitive'
 Plug 'Lokaltog/vim-easymotion'
@@ -25,6 +25,7 @@ Plug 'wellle/targets.vim'
 Plug 'michaeljsmith/vim-indent-object'
 
 " Filetypes and syntax goes here
+Plug 'udalov/kotlin-vim'
 Plug 'wting/rust.vim'
 Plug 'cespare/vim-toml'
 Plug 'PotatoesMaster/i3-vim-syntax'
