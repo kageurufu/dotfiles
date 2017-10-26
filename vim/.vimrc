@@ -4,15 +4,16 @@ endif
 
 call plug#begin('~/.vim/plugged')
 
-" Plug 'Shougo/unite.vim'
-" Plug 'Shougo/vimproc.vim', {'do': 'make'}
-" Plug 'ctrlpvim/ctrlp.vim'
+Plug 'Shougo/unite.vim'
+Plug 'Shougo/vimproc.vim', {'do': 'make'}
+Plug 'ctrlpvim/ctrlp.vim'
 
 " if v:version > 730
 "   Plug 'Valloric/YouCompleteMe', {'do': './install.py --all'}
 " endif
 
 Plug 'tpope/vim-fugitive'
+Plug 'airblade/vim-gitgutter'
 Plug 'Lokaltog/vim-easymotion'
 Plug 'scrooloose/syntastic'
 Plug 'bling/vim-airline'
@@ -25,14 +26,16 @@ Plug 'wellle/targets.vim'
 Plug 'michaeljsmith/vim-indent-object'
 
 " Filetypes and syntax goes here
-Plug 'udalov/kotlin-vim'
-Plug 'wting/rust.vim'
-Plug 'cespare/vim-toml'
-Plug 'PotatoesMaster/i3-vim-syntax'
-Plug 'kchmck/vim-coffee-script'
-Plug 'tikhomirov/vim-glsl'
-Plug 'wlangstroth/vim-racket'
-Plug 'dart-lang/dart-vim-plugin'
+Plug 'sheerun/vim-polyglot'
+
+" Plug 'udalov/kotlin-vim'
+" Plug 'wting/rust.vim'
+" Plug 'cespare/vim-toml'
+" Plug 'PotatoesMaster/i3-vim-syntax'
+" Plug 'kchmck/vim-coffee-script'
+" Plug 'tikhomirov/vim-glsl'
+" Plug 'wlangstroth/vim-racket'
+" Plug 'dart-lang/dart-vim-plugin'
 Plug 'manicmaniac/coconut.vim'
 
 " Colorschemes
@@ -137,6 +140,9 @@ autocmd FileType python set tabstop=4
 autocmd FileType python set shiftwidth=4
 
 autocmd FileType html,xml set listchars-=tab:>.
+
+au BufReadPost Jenkinsfile set syntax=groovy
+au BufReadPost Jenkinsfile set filetype=groovy
 
 nnoremap <leader>jd :YcmCompleter GoToDefinitionElseDeclaration<cr>
 nnoremap <F5> :YcmForceCompileAndDiagnostics<cr>
