@@ -1,0 +1,5 @@
+emulator() {
+  pushd ~/Android/Sdk/emulator
+  ./emulator "$*"
+  popd
+}
