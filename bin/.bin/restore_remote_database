@@ -1,0 +1,17 @@
+#!/bin/bash
+
+REMOTE_SERVER=$1
+INPUT_DUMP=$2
+INPUT_FILE=${HOME}/.dbsnaps/$2.sql.gz
+
+#scp -C ${INPUT_FILE} ${REMOTE_SERVER}:/tmp/restore.sql.gz
+ssh $REMOTE_SERVER <<'EOF'
+DOCKER_INST=$(sudo docker ps -q | head -n 1)
+echo "Restoring to $DOCKER_INST"
+sudo docker exec $DOCKER_INST /bin/sh -c 'apk add --update --no-cache postgresql >/dev/null'
+gensql() {
+  echo 'SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE pid != pg_backend_pid();';
+  zcat /tmp/restore.sql.gz
+}
+gensql | sudo docker exec -i $DOCKER_INST /bin/sh -c 'PGPASSWORD=$RDS_PASSWORD psql --dbname=$RDS_DB_NAME --host=$RDS_HOSTNAME --port=$RDS_PORT --username=$RDS_USERNAME --single-transaction'
+EOF

@@ -1,0 +1,15 @@
+#!/bin/bash
+
+while true; do 
+  PID=$(
+    ps ax -o pid,rss,command |\
+    grep Microsoft.Python.LanguageServer |\
+    awk '{ if ($2 > 2000000) { print $1 } }'
+  )
+  if [[ ! -z $PID ]]; then
+    echo "Killing $PID"
+    kill $PID
+  fi
+
+  sleep 10
+done

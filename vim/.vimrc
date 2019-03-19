@@ -8,6 +8,13 @@ Plug 'Shougo/unite.vim'
 Plug 'Shougo/vimproc.vim', {'do': 'make'}
 Plug 'ctrlpvim/ctrlp.vim'
 
+Plug 'autozimu/LanguageClient-neovim', {
+      \ 'branch': 'next',
+      \ 'do': 'bash install.sh',
+      \ }
+Plug 'junegunn/fzf'
+Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+
 " if v:version > 730
 "   Plug 'Valloric/YouCompleteMe', {'do': './install.py --all'}
 " endif
@@ -91,13 +98,23 @@ set listchars=tab:>.,trail:.,extends:#,nbsp:.
 set spell spelllang=en_us
 set mouse=a
 
-nnoremap ; :
+map ; :
+noremap ;; ;
 let mapleader=","
 set backspace=2
 
 set noshowmode
 
-" Unite.vim configurations
+let g:LanguageClient_serverCommands = {
+      \ 'python': ['pyls'],
+      \ 'rust': ['rustup', 'run', 'nightly', 'rls'],
+      \ 'javascript': ['javascript-typescript-stdio'],
+      \ 'javascript.jsx': ['tcp://127.0.0.1:2089'],
+      \ }
+
+nnoremap <silent> K :call LanguageClient_textDocument_hover()<CR>
+nnoremap <silent> gd :call LanguageClient_textDocument_definition()<CR>
+nnoremap <silent> <S-F6> :call LanguageClient_textDocument_rename()<CR>
 
 " Ctrlp configurations
 let g:ctrlp_working_path_mode = 'ra'

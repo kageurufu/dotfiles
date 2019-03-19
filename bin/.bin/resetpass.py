@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python
 from comanage import models, db, app
 
 with app.app_context():

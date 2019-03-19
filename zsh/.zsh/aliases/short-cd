@@ -1,0 +1,4 @@
+alias S/c='cd ~/Source/comanage && { { [[ -e .tmuxp.yaml ]] && [[ -z "${TMUX}" ]] } && tmuxp load . }'
+alias S/q=cd ~/Source/qmk_firmware
+alias S/l=cd ~/Source/levelplayingfield
+alias S/car=cd\ ~/Source/comanage-app-react

@@ -1,0 +1,10 @@
+weechat() {
+  for i in ~/.weechat/repos/*; do
+    pushd $i >/dev/null
+    git pull
+    popd >/dev/null
+  done
+
+  command weechat
+}
+

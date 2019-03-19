@@ -1,6 +1,8 @@
 #!/bin/bash
 
-git branch --merged master |\
+branch=${1:-master}
+
+git branch --merged $branch |\
   grep -v "\*" |\
-  grep -v "master" |\
+  grep -v "$branch" |\
   xargs -rn 1 git branch -d

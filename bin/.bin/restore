@@ -47,7 +47,13 @@ if [[ ! "${SNAPSHOT}" || -z "${SNAPSHOT}" ]]; then
   usage
 fi
 
-if [[ ! -e "${SNAPSHOT_DIR}${SNAPSHOT}.sql.gz" ]]; then
+if [[ -e "${SNAPSHOT_DIR}${SNAPSHOT}.sql" ]]; then
+  CAT=cat
+  SNAPSHOT_FILE="${SNAPSHOT_DIR}${SNAPSHOT}.sql"
+elif [[ -e "${SNAPSHOT_DIR}${SNAPSHOT}.sql.gz" ]]; then
+  CAT=zcat
+  SNAPSHOT_FILE="${SNAPSHOT_DIR}${SNAPSHOT}.sql.gz"
+else
   echo "Snapshot '${SNAPSHOT}' not found"
   exit 1
 fi
@@ -65,7 +71,7 @@ write_sql() {
   echo "CREATE EXTENSION \"pg_trgm\";"
   
   # Dump the snapshot
-  pv -p -w 80 "${SNAPSHOT_DIR}/${SNAPSHOT}.sql.gz" | zcat
+  pv -p -w 80 "${SNAPSHOT_FILE}" | $CAT
   
   # Reset the passwords
   echo "UPDATE \"user\" SET password = '${PASSWORD}', totp_enabled = FALSE, totp_key = '';"

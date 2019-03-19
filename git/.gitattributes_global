@@ -1,1 +1,2 @@
 *.pdf diff=pdf
+*.json diff=json

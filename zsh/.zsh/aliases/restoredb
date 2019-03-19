@@ -1,0 +1,26 @@
+restoredb() {
+  if [ "$#" -ne 2 ] || ! [ -f "$2" ]; then
+    echo "Usage: $0 DBNAME SRCFILE"
+    return 2
+  fi
+
+  DBNAME="$1"
+  SRCFILE="$2"
+  TMPLST=$(mktemp)
+
+  echo "Restoring $SRCFILE to $DBNAME"
+  dropdb --if-exists "$DBNAME" || return 1
+  createdb "$DBNAME" || return 1
+
+  echo "Generating list"
+  pg_restore -l "$SRCFILE" \
+  | sed '/MATERIALIZED VIEW DATA/d' >> $TMPLST \
+  || return 1
+
+  
+  echo "Recreating schema"
+  pg_restore -L "$TMPLST" -Oxsd "$DBNAME" "$SRCFILE" || return 1
+  
+  echo "Recreating data"
+  pg_restore --disable-triggers -Oxa1d "$DBNAME" "$SRCFILE" || return 1
+}

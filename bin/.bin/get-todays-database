@@ -1,0 +1,26 @@
+#!/bin/bash
+
+dump-command() {
+  DATABASE="$1"
+  DATE="$2"
+
+  echo 'if [[ ! -e "'"/shared/database_dumps/$DATABASE/$DATABASE-$DATE.psql"'" ]]; then'
+  echo '  /shared/database_dumps/'$DATABASE'/dump.sh'
+  echo 'else'
+  echo '  echo "Dump already exists, continuing"'
+  echo 'fi'
+}
+
+main() {
+  DATE=$(date '+%Y-%m-%d')
+  DATABASE=${1:-accounting}
+
+  if [[ ! -e "$HOME/.dbsnaps/$DATABASE-$DATE.psql" ]]; then
+    dump-command "$DATABASE" "$DATE" | ssh -t comanage-jenkins /bin/bash 2>/dev/null 1>&2
+    scp -C "comanage-jenkins:/shared/database_dumps/$DATABASE/$DATABASE-$DATE.psql" "$HOME/.dbsnaps/" 1>&1
+  fi
+
+  echo "$HOME/.dbsnaps/$DATABASE-$DATE.psql"
+}
+
+main $@

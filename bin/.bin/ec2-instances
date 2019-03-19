@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python
 
 import boto
 from collections import defaultdict
@@ -12,11 +12,19 @@ DIVIDER = """
 ###########################################
 """
 
+END = """
+###########################################
+########     end ec2-instances     ########
+###########################################
+"""
+
+
 TMPL = """
 Host {name}
   HostName {ip}
   User {user}
   IdentityFile ~/.ssh/{id}
+  IdentitiesOnly yes
 """
 
 def get_instances():
@@ -42,6 +50,14 @@ def read_old_config():
             print("Initializing config")
             old = None
             pass
+    if END in old:
+        try:
+            realold = old
+            old, extra = old.split(END)
+            config += "\n" + extra
+        except Exception:
+            old = realold
+
     return config, old
 
 def write_new_config(config, collected_instances, user='ec2-user', id_file='id_aws'):
@@ -58,6 +74,8 @@ def write_new_config(config, collected_instances, user='ec2-user', id_file='id_a
                         user=user
                     ))
                 print("Instance %s-%d (%s)" % (name, index + 1, instance.ip_address))
+
+        fout.write(END)
 
 
 if __name__ == '__main__':

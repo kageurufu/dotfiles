@@ -1,0 +1,23 @@
+upfind() {
+  if [[ -z ${1+x} ]]; then
+    echo "Usage: $0 filename [path]"
+    return 2
+  fi
+  
+  if [[ -z ${2+x} ]]; then
+    searchpath=$(pwd)
+  else
+    searchpath=${2}
+  fi
+
+  while [[ ! -z $searchpath ]]; do
+    if [[ -e $searchpath/$1 ]]; then
+      echo $searchpath/$1
+      return 0
+    fi
+
+    searchpath=${searchpath%/*}
+  done
+
+  return 1
+}

@@ -2,25 +2,35 @@
 	email = franklyn@tackitt.net
 	name = Franklyn Tackitt
 	signingkey = franklyn@tackitt.net
+
 [core]
-#	autocrlf = input
 	excludesfile = /home/frank/.gitignore_global
-	attributesfile = .gitattributes_global
+	attributesfile = /home/frank/.gitattributes_global
+
 [push]
 	default = matching
 	gpgSign = if-asked
+
 [web]
 	browser = google-chrome-stable
+
 [alias]
 	lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%C(bold blue)<%an>%Creset' --abbrev-commit
+
 [color]
 	ui = auto
+
+[fetch]
+	prune = true
+
 [commit]
-# gpgsign = auto
-[http "https://git.76qp.flynnhub.com"]
-	sslCAInfo = /home/frank/.flynn/ca-certs/flynn-1481312144.pem
-[credential "https://git.76qp.flynnhub.com"]
-  helper = /usr/bin/flynn git-credentials
+	gpgsign = true
+
+[tag]
+	gpgsign = true
 
 [diff "pdf"]
   textconv = pdftotext-stdout
+
+[diff "json"]
+	textconv = python -m json.tool
